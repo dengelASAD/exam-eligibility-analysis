@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Exam Eligibility Checker</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <script src="chart.js"></script>
+  </head>
+  <body>
+    <div class="container animate-in">
+      <div class="glass-panel">
+        <h1>Check My Exams</h1>
+        <p class="subtitle">Just upload your student list file below!</p>
+
+      <div class="mode-switcher">
+        <button
+          id="class-mode"
+          class="mode-btn active"
+          onclick="setMode('classification')"
+        >
+          Classification
+        </button>
+        <button id="reg-mode" class="mode-btn" onclick="setMode('regression')">
+          Regression
+        </button>
+      </div>
+
+      <div id="upload-screen">
+        <div
+          class="upload-section"
+          onclick="document.getElementById('fileInput').click()"
+        >
+          <svg class="upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+          <div style="font-weight: 700; font-size: 1.25rem; color: #1e293b; margin-bottom: 8px;">Click to choose your file</div>
+          <div style="font-size: 1rem; color: #888">(.csv files only)</div>
+          <input
+            type="file"
+            id="fileInput"
+            class="hidden"
+            accept=".csv"
+            onchange="handleFileUpload(event)"
+          />
+        </div>
+
+        <button
+          class="big-button"
+          onclick="document.getElementById('fileInput').click()"
+        >
+          Choose File
+        </button>
+      </div>
+
+      <div id="loading" class="hidden animate-in">
+        <div class="loader-container">
+          <div class="spinner"></div>
+          <div class="loader-text">Analyzing your data...</div>
+        </div>
+      </div>
+
+      <div id="result-screen" class="hidden animate-in mt-8">
+        <div id="classification-results" class="results-grid hidden">
+          <!-- Main summary removed to focus on comparison table -->
+        </div>
+
+        <div id="classification-leaderboard" class="hidden">
+          <h2>Classification Model Leaderboard:</h2>
+          <div class="table-container">
+            <table id="class-table">
+              <thead>
+                <tr>
+                  <th>Model</th>
+                  <th>Accuracy</th>
+                  <th>Precision</th>
+                  <th>Recall</th>
+                  <th>F1-Score</th>
+                </tr>
+              </thead>
+              <tbody id="class-body">
+                <!-- Data will appear here -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="model-selector-container" class="hidden" style="margin-top: 20px; text-align: left;">
+          <label for="model-select" style="font-weight: bold; font-size: 1.1rem;">Focus on Model:</label>
+          <select id="model-select" class="big-button" style="width: auto; height: auto; padding: 10px; display: inline-block; margin-left: 10px;" onchange="updateSelectedModel()">
+            <!-- Options will be populated -->
+          </select>
+        </div>
+
+        <div id="classification-chart-container" class="chart-container hidden">
+          <canvas id="classificationChart"></canvas>
+        </div>
+
+        <div id="confusion-matrix-container" class="cm-section hidden">
+          <h3>Confusion Matrix (Random Forest)</h3>
+          <div class="cm-grid">
+            <div class="cm-cell">
+              <div class="cm-value" id="cm-00">0</div>
+              <div class="cm-label">True Negative</div>
+            </div>
+            <div class="cm-cell">
+              <div class="cm-value" id="cm-01">0</div>
+              <div class="cm-label">False Positive</div>
+            </div>
+            <div class="cm-cell">
+              <div class="cm-value" id="cm-10">0</div>
+              <div class="cm-label">False Negative</div>
+            </div>
+            <div class="cm-cell">
+              <div class="cm-value" id="cm-11">0</div>
+              <div class="cm-label">True Positive</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="regression-results" class="hidden">
+          <h2>Regression Model Metrics:</h2>
+          <div class="table-container">
+            <table id="reg-table">
+              <thead>
+                <tr>
+                  <th>Model</th>
+                  <th>MAE</th>
+                  <th>MSE</th>
+                  <th>RMSE</th>
+                  <th>SSE</th>
+                </tr>
+              </thead>
+              <tbody id="reg-body">
+                <!-- Data will appear here -->
+              </tbody>
+            </table>
+          </div>
+          <div id="regression-chart-container" class="chart-container">
+            <canvas id="regressionChart"></canvas>
+          </div>
+        </div>
+
+        <button
+          class="big-button secondary-button mb-8"
+          onclick="location.reload()"
+          style="margin-top: 40px;"
+        >
+          <svg style="width: 20px; height: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+          Start Over
+        </button>
+      </div>
+      </div> <!-- End glass-panel -->
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
